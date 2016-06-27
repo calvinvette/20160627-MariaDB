@@ -166,6 +166,32 @@ mysql> select * from Customer;
 
 
 
+Create a MySQL user
+
+create user foo identified by "Pa$$w0rd" 
+grant all on *.* to "foo"@"%" with grant option  
+
+
+Use the notes above to
+
+0. Start the mysqld service if necessary (/etc/init.d/mysql start)
+1. Run the mysql_secure_installation
+2. Create a "normal" database
+3. Create a table in that database
+4. Insert a couple of records in that database
+
+We'll come back at about 5:20, press forward, then leave the remainder of 
+time for folks to catch up on anything they didn't earlier.
+
+You're also welcome to do it early in the morning as well if you need to 
+leave soon.
+
+
+
+
+
+
+
 
 
 
