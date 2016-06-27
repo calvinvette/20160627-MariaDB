@@ -1,0 +1,68 @@
+Yum Install
+
+	normally, you'd log in as "root" and doa "yum install mariadb"
+
+	However we'll need to add a non-standard Yum Repository to our list to access it.
+
+	https://mariadb.com/kb/en/mariadb/yum/
+
+
+
+Create a 
+
+vi /etc/yum.repos.d/MariaDB.repo
+nano /etc/yum.repos.d/MariaDB.repo
+
+[mariadb]
+name = MariaDB-10.1.11
+baseurl=https://downloads.mariadb.com/files/MariaDB/mariadb-10.1.11/yum/rhel6-amd64/
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+
+yum install MariaDB-server MariaDB-client
+
+
+
+backup the MariaDB.repo:
+cp /etc/yum.repos.d/MariaDB.repo /root
+
+
+To do the upgrade:
+1. Modify the repo to reflect the updated version
+
+[mariadb]
+name = MariaDB-10.1.14
+baseurl=https://downloads.mariadb.com/files/MariaDB/mariadb-10.1.14/yum/rhel6-amd64/
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+
+Then run the update command:
+yum update MariaDB-server MariaDB-client
+
+
+Do the downgrade:
+
+Replace the newer Repo file with the older one
+
+[mariadb]
+name = MariaDB-10.1.11
+baseurl=https://downloads.mariadb.com/files/MariaDB/mariadb-10.1.11/yum/rhel6-amd64/
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+
+
+Uninstall the current version
+yum remove MariaDB-server MariaDB-client
+
+#Clean out the cached metadata for the repo
+yum clean metadata
+
+Re-install the MariaDB (verify the version number is correct before you say "y"!)
+
+yum install MariaDB-server MariaDB-client
+
+Lunch until 2pm Eastern, unless you have connectivity wrinkles to iron out, 
+in which case come back 10 minutes early
+
+
+
