@@ -8,7 +8,7 @@ Yum Install
 
 
 
-Create a 
+Create a yum repo for the MariaDB RPMs for your version:
 
 vi /etc/yum.repos.d/MariaDB.repo
 nano /etc/yum.repos.d/MariaDB.repo
@@ -63,6 +63,114 @@ yum install MariaDB-server MariaDB-client
 
 Lunch until 2pm Eastern, unless you have connectivity wrinkles to iron out, 
 in which case come back 10 minutes early
+
+
+We're currently working on installing MariaDB server and client from the directions above
+If you don't have a virtual machine called "MariaDB" - if you only have "default" - let me know.
+Everyone should have had it, but it's possible I missed one like Jag's.
+
+We're just making sure at the end of this that you have a version of MariaDB installed
+
+
+
+
+Checking processes:
+
+# List all processes
+ps -ef 
+
+# Find all commands with "mysql"
+ps -ef | grep mysql
+
+
+#Find all "Services"
+chkconfig
+
+# Find all "mysql" services
+chkconfig | grep mysql
+
+Runlevels 0-6
+Runlevel 3 is the normal default for a non-graphical server (multi-user with networking)
+Runlevel 5 is the normal default for a graphical server (multi-user with networking and X11 Graphics)
+
+chkconfig is telling you whether our service is on in a given runlevel
+We only care that mysql is "on" for runlevel 3
+
+If it's "3:on", it will start on the next reboot to runlevel 3
+
+We can start it right now by using the init script's "start" command:
+
+/etc/init.d/mysql start
+
+We can ask it to shutdown (without downing the Linux server) by issuing the init's "stop" command:
+
+/etc/init.d/mysql stop
+
+We can also ask it to do a quick stop-start restart:
+
+/etc/init.d/mysql restart
+
+ps xgau | grep ^mysql will find all processes owned by the "mysql" unix user
+In "mysqld", the "d" stands for "daemon", or a Unix background process
+The "pid-file" is the process-id, so other programs and scripts can find this process easily
+
+UserId	PID			Command with arguments
+mysql	2444	..........	/usr/sbin/mysqld --basedir=/usr --datadir=/var/lib/mysql.... 
+
+
+mysql command-line client
+We have 2 Unix userIds - root and mysql
+Unix UserIds have nothing to do with Database 
+
+mysql_secure_installation
+	Set the mysql root user's password, accept all of the other defaults
+
+Now log in to the new-secure server:
+
+mysql -u root -p
+
+within the mysql client:
+
+mysql> show databases;
+
+should show 3 databases (or "schema"):
+information_schema
+mysql
+performance_schema
+
+Change the current working DB to mysql (which is like the System schema in other products):
+mysql> use mysql;
+
+mysql> show tables;
+
+Create a new non-mysql-internal database;
+mysql> create database weasley;
+
+Now go use the newly-created weasley DB
+mysql> use weasley;
+
+No tables in the newly created databases
+mysql> show tables;
+
+mysql> create table Customer (
+	-> customerId int auto_increment primary key,
+	-> firstName varchar(40),
+	-> lastName varchar(40),
+	-> email varchar(80)
+	-> );
+
+mysql> insert into Customer (firstName, lastName, email) values ("Harry", "Potter", "harry@hogwarts.ac.uk");
+mysql> insert into Customer (firstName, lastName, email) values ("Ron", "Weasley", "ron@hogwarts.ac.uk");
+mysql> select * from Customer;
+
+
+
+
+
+
+
+
+Alternative installation directories
 
 
 
