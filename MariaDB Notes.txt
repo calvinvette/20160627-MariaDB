@@ -180,11 +180,12 @@ Use the notes above to
 3. Create a table in that database
 4. Insert a couple of records in that database
 
-We'll come back at about 5:20, press forward, then leave the remainder of 
-time for folks to catch up on anything they didn't earlier.
+Add a mysql user with granted permissions
 
-You're also welcome to do it early in the morning as well if you need to 
-leave soon.
+We'll assume everyone will have that by 10am Eastern tomorrow. I should be in early tomorrow to assist
+anyone who wants to do this then.
+
+
 
 
 
