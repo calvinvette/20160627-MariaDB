@@ -96,7 +96,7 @@ appUser@192.168.4.12	password: foobar12
 
 
 Places to change compiled-in defaults:
-/etc/init.d/mysql < my.cnf < command-line options
+configured/compiled-in options < /etc/init.d/mysql < my.cnf < command-line options
 
 
 Migrate to a more "segregated" mysql data directory structure
@@ -114,15 +114,102 @@ Migrate to a more "segregated" mysql data directory structure
 
 4. Move the data, log and pid files
 	mv /var/lib/mysql/* data
-	mv data/*.pid run
+	mv data/*.pid run	# Should be file not found if server is off
 	mv data/*log* data/*.err logs
 
 5. Change ownership to mysql user
-
 	chown -R mysql:mysql /mysql_runtime
 
 Take a quick break then do these steps until 12:45 Eastern - we'll
 finish them off real quick then go to lunch. Sorry!
+
+
+
+
+Required: Tweak the my.cnf file
+http://dev.mysql.com/doc/refman/5.7/en/option-files.html
+http://dev.mysql.com/doc/refman/5.7/en/mysql-install-db.html
+
+	my.cnf (and included files) need to NOT be world-writeable
+	chmod to 755
+
+
+Modify the /etc/my.cnf.d/servers.cnf [mysqld] section to include the 
+new location
+
+	;basedir=/usr
+	;basedir=/opt/mysql
+
+	[mysqld]
+		# applies just to server
+		datadir = /mysql_runtime/data
+		log-error = /mysql_runtime/logs/mariadb.error.log
+				
+	[mysql]
+		; applies just to mysql client
+
+
+For now, launch the server with mysqld_safe:
+
+	mysqld_safe &
+
+
+Lunch from 1:50-2:50 Eastern, complete this by 3:05
+
+
+
+kill -HUP $pid	= "Please shut down now"
+kill $pid	= "Shut down now"
+kill -KILL $pid	= "Terminate with extreme prejudice"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Optional: Isolate the MariaDB programs to /opt/mysql:
+
+Now uninstall MariaDB client and server
+
+	yum remove MariaDB-server MariaDB-client
+
+Upgrade repo file if necessary (to 10.1.14)
+
+	/etc/yum.repos.d/MariaDB.repo
+
+Install with --installroot /opt/mysql
+
+	yum install --installroot /opt/mysql MariaDB-server MariaDB-client
+
+Modify your PATH to include the new location in your .bashrc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
