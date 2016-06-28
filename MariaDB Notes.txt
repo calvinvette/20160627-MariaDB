@@ -186,6 +186,17 @@ We'll assume everyone will have that by 10am Eastern tomorrow. I should be in ea
 anyone who wants to do this then.
 
 
+http://osdldbt.sourceforge.net/
+
+http://downloads.sourceforge.net/project/osdldbt/dbt1/v2.1/dbt1-v2.1.tar.gz
+http://downloads.sourceforge.net/project/osdldbt/dbt2/0.40/dbt2-0.40.tar.gz
+
+
+
+
+?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fosdldbt%2Ffiles%2Fdbt1%2Fv2.1%2F&ts=1467118158&use_mirror=superb-sea2
+?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fosdldbt%2Ffiles%2Fdbt2%2F0.40%2F&ts=1467117961&use_mirror=ufpr
+
 
 
 

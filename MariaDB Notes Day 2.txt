@@ -1,0 +1,128 @@
+Notes - Day 2
+
+We'll get started in about 2 minutes. Waiting for some folks to finishing logging in.
+
+Grab a quick cuppa.
+
+Added a MariaDB.repo in /etc/yum.repos.d/
+yum install MariaDB Server & Client
+Optional up & down -grades
+	(Not data and not config files)
+	(Not the process - do a /etc/init.d/mysql stop, then backup, then test the backup, then the upgrade, then /etc/init.d/mysql start)
+
+Up for today
+	Files, log files, etc.
+	Alternate installations
+	Security (just a bit more)
+	Backends (MyISAM, InnoDB, Aria, XtraDB, Memory, TokuDB, ScaleDB, ...)
+	Backups / Cloning
+	
+
+cHARSETS (AT SOME POINT throughout the course)
+
+
+
+Compiled installation (self-compiled from source)
+	=> /usr/local/mysql
+		.../bin = binary executables and scripts 
+		.../logs = runtime logs
+		.../data = all of your data, including caches
+		.../lib = shared libraries (including plugins)
+		.../conf | .../etc = your my.cnf file (but self-chosen)
+		.../include = headers for compilation
+		.../share | .../man = manual pages and support text files
+		.../scripts 
+		.../support-files = sample my.cnf files and more
+
+Default "yum" installation:
+	Special "configure" script customized version for RHEL/CentOS
+		
+		.../bin => /usr/bin
+		.../logs => /var/lib/mysql
+		.../data => /var/lib/mysql
+		.../lib => /usr/lib/mysql or /usr/lib64/mysql depending on platform
+		.../conf | .../etc = /etc/my.cnf (and /etc/my.cnf.d/ )
+		.../include => /usr/include 
+		.../share | .../man => /usr/share, /usr/share/man
+
+	To alter yum-compiled-in defaults, either:
+		modify my.cnf file 
+		use command-line options
+		modify the /etc/init.d/mysql script
+
+	10.1.11
+	10 -> Major version
+	1 -> Minor version
+	11 -> Patch level
+
+
+	root -> /usr/bin/mysqld_safe ... (a wrapper to runas mysql)
+		sudo as mysql user -> /usr/sbin/mysqld ...
+		(originally executed from /etc/init.d/mysql start)
+		(which is more easily invoked as "service start")
+
+		(remember, we can do "/etc/init.d/mysql stop" == "service mysql stop"
+			or "/etc/init.d/mysql restart" == "service mysql restart")
+
+	Table names (and sometimes field names) may be case sensitive
+	Depending on storage backend, filing system type, and config options!
+
+	User & Host are a tuple (combination pair)
+		calvin@localhost	password: foobar	(all privs)
+		calvin@www.foo.com	password: barfoo	(restricted)
+	treated as if they were two completely different users
+
+		% = wildcard (good idea to not use this for hosts)
+	
+	
+192.168.4.7
+192.0.0.0 = 192.0.0.0/255.0.0.0 => address must start with 192
+192.168.0.0 = 192.168.0.0/255.255.0.0 => address must start with 192.168...
+
+user@host
+	host can be 
+
+calvinvette @ %.cvs.com
+calvinvette @ 192.168.0.0/255.255.0.0
+localhost == 127.0.0.1
+
+create user 'testuser'@'%corp.cvs.com'
+HOST and USER is Primary Key in the mysql.user table
+
+
+appUser@192.168.4.11	password: foobar11
+appUser@192.168.4.12	password: foobar12
+
+
+
+Places to change compiled-in defaults:
+/etc/init.d/mysql < my.cnf < command-line options
+
+
+Migrate to a more "segregated" mysql data directory structure
+
+1. Stop the mysql server
+	service mysql stop
+
+2. mkdir /mysql_runtime
+
+3. Make a "data", "logs", and "run" directories in it
+	cd /mysql_runtime
+	mkdir data
+	mkdir logs
+	mkdir run
+
+4. Move the data, log and pid files
+	mv /var/lib/mysql/* data
+	mv data/*.pid run
+	mv data/*log* data/*.err logs
+
+5. Change ownership to mysql user
+
+	chown -R mysql:mysql /mysql_runtime
+
+Take a quick break then do these steps until 12:45 Eastern - we'll
+finish them off real quick then go to lunch. Sorry!
+
+
+
