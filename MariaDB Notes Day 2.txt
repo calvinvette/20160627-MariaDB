@@ -104,60 +104,71 @@ Migrate to a more "segregated" mysql data directory structure
 1. Stop the mysql server
 	service mysql stop
 
-2. mkdir /mysql_runtime
+2. mkdir /mariadb_runtime
 
 3. Make a "data", "logs", and "run" directories in it
-	cd /mysql_runtime
+	cd /mariadb_runtime
 	mkdir data
 	mkdir logs
 	mkdir run
 
 4. Move the data, log and pid files
 	mv /var/lib/mysql/* data
-	mv data/*.pid run	# Should be file not found if server is off
+	mv data/*.pid run	# Should be "file not found" if server is off
 	mv data/*log* data/*.err logs
 
 5. Change ownership to mysql user
-	chown -R mysql:mysql /mysql_runtime
+	chown -R mysql:mysql /mariadb_runtime
 
 Take a quick break then do these steps until 12:45 Eastern - we'll
 finish them off real quick then go to lunch. Sorry!
 
 
+Tweak the my.cnf file
 
-
-Required: Tweak the my.cnf file
 http://dev.mysql.com/doc/refman/5.7/en/option-files.html
 http://dev.mysql.com/doc/refman/5.7/en/mysql-install-db.html
 
 	my.cnf (and included files) need to NOT be world-writeable
-	chmod to 755
+	chmod to 755 if necessary (u+rwx, g+rx, o+rx)
 
 
 Modify the /etc/my.cnf.d/servers.cnf [mysqld] section to include the 
 new location
 
 	;basedir=/usr
-	;basedir=/opt/mysql
+	;basedir=/opt/mariadb
 
 	[mysqld]
 		# applies just to server
-		datadir = /mysql_runtime/data
-		log-error = /mysql_runtime/logs/mariadb.error.log
+		; user = mysql
+		datadir = /mariadb_runtime/data
+		log-error = /mariadb_runtime/logs/mariadb.error.log
+		pid-file = /mariadb_runtime/run/mariadb.pid
+		socket = /mariadb_runtime/run/mariadb.sock
+		bind-address = 0.0.0.0	# bind to all IP address on this system
 				
 	[mysql]
 		; applies just to mysql client
 
+Add the PID file, socket, and bind-addres in your config file the 
+stop and restart the server
+Try using tail -f to watch the log file in real time in a different 
+VC window (before restarting):
+
+tail -f /mariadb_runtime/logs/mariadb.error.log
+(In CentOS/RHEL console, use alt-left-arrow and alt-right-arrow to switch
+between virtual console screens, or alt-F# to select a console 1-6)
 
 For now, launch the server with mysqld_safe:
 
 	mysqld_safe &
 
-
-Lunch from 1:50-2:50 Eastern, complete this by 3:05
-
-
-
+To stop, use
+/etc/init.d/mysql stop
+OR
+service mysql stop
+OR (progressively):
 kill -HUP $pid	= "Please shut down now"
 kill $pid	= "Shut down now"
 kill -KILL $pid	= "Terminate with extreme prejudice"
@@ -165,17 +176,18 @@ kill -KILL $pid	= "Terminate with extreme prejudice"
 
 
 
+yum install git
 
+(Using it for "DevOps" for my.cnf and related files...)
 
+cd /etc
+git init
+git add my.cnf my.cnf.d/ rc.d/init.d/mysql
+git commit -m "20160628@15.42 Pre-segregation config files"
 
-
-
-
-
-
-
-
-
+my_print_defaults -c /etc/my.cnf mysqld
+my_print_defaults -c /etc/my.stage.cnf mysqld
+my_print_defaults -c /etc/my.test.cnf mysqld
 
 
 
@@ -203,6 +215,76 @@ Modify your PATH to include the new location in your .bashrc
 
 
 
+
+
+
+
+https://downloads.mariadb.org/interstitial/mariadb-10.1.14/source/mariadb-10.1.14.tar.gz/from/
+
+http://mirrors.syringanetworks.net/mariadb/mariadb-10.1.14/source/mariadb-10.1.14.tar.gz
+https://downloads.mariadb.org/f/mariadb-10.1.14/source/mariadb-10.1.14.tar.gz/from/http%3A//mirrors.syringanetworks.net/mariadb/?serve
+
+
+http://mirrors.syringanetworks.net/mariadb//mariadb-10.1.14/source/mariadb-10.1.14.tar.gz
+http://mirror.jmu.edu/pub/mariadb//mariadb-10.1.14/source/mariadb-10.1.14.tar.gz
+
+
+yum install gcc gcc-c++ make autoconf binutils cmake
+yum install ncurses-devel
+wget ...-src.tar.gz
+tar -xvzf ...-src.tar.gz
+cd ...
+./configure (optionally with changes to the baked-in default locations)
+or 
+cmake .
+make && make install
+
+
+
+bin-logs
+
+10 minute break (until 4:45 Eastern) then we'll move on to 
+Table backend storage types 
+and start talking about Backups
+
+Kindle Gift Certificates should have arrived in your email box
+Check it out and let me know if it didn't!
+
+Or not... Amazon still has them listed as "Scheduled".
+They usually only take about 5 minutes, and I sent them out at lunch.
+
+
+
+Single_file = 
+File_per_table =
+
+Brewer's Theorem (CAP) - ACID Transactions require CA
+	C - Consistency
+	A - Availability
+	P - Partitioning/Parallelization
+
+
+For Relational Databases
+AriaDB > MyISAM
+XtraDB > InnoDB (use XtraDB as your default)
+
+The black dog is barking at me.
+
+Full-Text Search: (Natural Language Processing, bigrams, trigrams)
+SphinxSE 
+Cassandra - possibly integrating with Lucene (and friends)
+
+Social Data:
+OQGraph - Relationship data (not necessarily relational, or 
+	rather super-relational, including qualities and quantities about
+	relationships)
+
+
+See you tomorrow @10am. We'll get started right away with exercises
+on table engines and then backups
+
+I'll try to kick those Kindle gift certificates out to you now 
+and get you the (fluid, changing) PDF tonight.
 
 
 
