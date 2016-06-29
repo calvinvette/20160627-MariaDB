@@ -1,0 +1,82 @@
+Day 3
+
+pager less
+
+less >= more	("less is more")
+
+Create table Foo (
+
+) ENGINE = InnoDB;
+
+// File-Per_table
+
+show engines
+
+show create table Customer 
+	// Shows existing statement 
+	// fully filled out
+
+alter table Foo engine = myEngine;
+	// where myEngine is one of the available
+	// options installed from 'show engines'
+
+Our customer table is already XtraDB/InnoDB
+
+Take a few minutes to 
+Create another table (Orders) with Engine = Aria
+	Put in a few records
+ls -l the datadir/weasley
+Alter table customer to use Aria
+ls -l the datadir/weasley
+
+cd /maria_runtime
+mkdir raw
+cd raw
+wget http://nextgened.com/cvs/xmardba/data/weasleydb.mysql.dump
+
+You can't use
+/etc/init.d/mysql start
+at the moment - it needs to be tweaked for our new data dir
+
+Use
+mysqld_safe &
+instead for now.
+
+mysqldump -u calvin -p weasley -S 
+	/mariadb_runtime/run/mariadb.sock > 20160629@11.09.weasley.mysql.dump
+
+Creates a hot logical dump (hot - while server is running, logical because it uses text format)
+	Universal, but slow to restore
+
+For a physical cold dump, we copy all the data and log files
+	binlog - stores events in binary log - anything that modifies or potentially the data or its structure
+		timestamped
+		checkpoints
+	undo log - in transaction log
+	redo log - logs statements to be executed, removed after completion - for crash survival
+
+	Fastest to backup, fastest to restore, but we have to down the server**
+		(** - use a slave in master/slave config)
+
+https://mariadb.com/kb/en/mariadb/log-files/
+
+For a physical hot dump, we need to use the binlog and products that use it (XtraBackup, mysqlhotcopy)
+	still give us the mariadb binary data files, indexes, logs, etc.
+	Slows down the database server **
+	Bit tricker and the backup itself takes significantly longer
+		(** can also be done on a slave)
+
+
+Take a quick minute to do the mysqldump above (substituting your userId) and look at the
+	resulting file
+Do that and then take a Break until noon Eastern
+
+
+
+
+
+
+
+
+	
+
