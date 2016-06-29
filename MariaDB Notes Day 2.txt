@@ -274,6 +274,10 @@ Full-Text Search: (Natural Language Processing, bigrams, trigrams)
 SphinxSE 
 Cassandra - possibly integrating with Lucene (and friends)
 
+NoSQL = SQL (RDBMS), Log (Cassandra), K/V stores (Cass,HBase)
+	FullText (Sphinx, Lucene), Graph (Neo4J, OQGraph)
+	Doc (MongoDB, CouchDB)
+
 Social Data:
 OQGraph - Relationship data (not necessarily relational, or 
 	rather super-relational, including qualities and quantities about

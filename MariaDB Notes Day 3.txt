@@ -97,8 +97,17 @@ CONNECT engine (later)
 	Connect for Txt file
 	Connection to Hive (as time allows)
 DATA/INDEX DIRECTORY
-REDO/UNDO/BIN logs
+aria_log
+	undo logs - transaction commit/rollback
+ibdata
+ib_logfile (similar to Oracle redo)
+	redo - commands to repair from restart (pre-flushed)
+	binlogs
+		(point-in-time recover, replication, clustering)
+	rollover from 0-1
 
+CVS: Keep iblogs/data in different folder from aria
+	(ib_log_directory different from datadirectory)
 
 In order to make copy and paste work:
 
@@ -119,7 +128,7 @@ ssh into the box
 
 
 
-
+Lunch 1:40 - 2:40 Eastern 
 
 
 
