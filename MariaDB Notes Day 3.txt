@@ -72,6 +72,56 @@ Take a quick minute to do the mysqldump above (substituting your userId) and loo
 Do that and then take a Break until noon Eastern
 
 
+mysqldump defaults to full, integrated SQL (both DROP/CREATE statements and INSERT statements)
+
+  mysqldump -u calvin -p weasley > 20160629@11.09.weasley.mysql.dump
+
+This output can be piped into the mysql command client
+
+  mysql -u calvin -p < 20160629@11.09.weasley.mysql.dump
+
+mysqldump can also be used to output the data separately as CSV or tab-delimited 
+(2 files-per-table, one for the SQL DROP/CREATE, one txt for the data):
+
+	mysqldump -u calvin -p weasley -T .
+
+mysqlimport can take those files and import them (usually significantly faster than SQL files)
+By default, the text files need to be in the data/dbName dir
+
+	mysql -u calvin -p weasley < *.sql
+	mysqlimport -u calvin -p weasley *.txt
+
+copy/paste
+CONNECT engine (later)
+	Connect for SQL Server
+	Connect for Txt file
+	Connection to Hive (as time allows)
+DATA/INDEX DIRECTORY
+REDO/UNDO/BIN logs
+
+
+In order to make copy and paste work:
+
+In VirtualBox menu, Device->Network->Network Settings
+Switch networking type from NAT to Bridged (which gives us DHCP (Dynamic)) on eth0/Adapter 1
+
+In Linux
+Restart the network
+	/etc/init.d/network restart
+
+Get the new DHCP address
+	ifconfig eth0
+
+ssh into the box
+	(Run Command in windows, cmd, then ssh)
+	ssh -l root 192.168.2.XX 
+	(where XX is your likely new host IP)
+
+
+
+
+
+
 
 
 
