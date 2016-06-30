@@ -174,7 +174,7 @@ MariaDB [(none)]> CHANGE MASTER TO
 	-> MASTER_HOST = '(ip address of master)',
 	-> MASTER_USER = 'slave1',
 	-> MASTER_PASSWORD = 'password',
-	-> MASTER_PORT = 5000,
+	-> MASTER_PORT = 3306,
 	-> MASTER_LOG_FILE = 'binlog.000003',	(from master binlog coords)
 	-> MASTER_LOG_POS = 629			(from master binlog coords)
 
@@ -206,6 +206,10 @@ MariaDB [(none)]> START SLAVE;
 	4. Verify data on slave
 
 
+
+
+
+Lunch + Replication Lab from now until 3:10 Eastern
 
 
 
