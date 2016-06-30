@@ -78,16 +78,17 @@ Launch the original VM, configure as a master
 	Take a break until 12:15
 	We'll configure as a master when we come back.
 
+	In the my.cnf.d/server.cnf, set the server_id and binlog_format
+		server_id=1
+		binlog_format=MIXED
+
 	Launch MariaDB on the master
 
 		mysqld_safe &
 
-	In the client, set the server id and binlog_fmt. 
-	Once we know these work we'll want to put them in the my.cnf files!
-	(we're assuming we've already set the log_bin="binlog" in my.cnf files
+	For now, open the firewall up:
 
-	MariaDB [(none)]> SET @@server_id = 1;
-	MariaDB [(none)]> SET @@binlog_format = 'MIXED';
+		iptables -F		(just for now)
 
 	Now create the Slave's user account with REPLICATION SLAVE permission:
 
@@ -137,6 +138,7 @@ Launch the copy, configure as a slave
 
 		/etc/init.d/network restart
 		ifconfig -a
+		iptables -F		(just for now)
 
 	Ping the master's IP address from the slave
 		ping 192.168.2.99
@@ -146,6 +148,12 @@ Launch the copy, configure as a slave
 
 	(Control-C to get out of ping)
 
+Now Let's update the slave1 server config
+
+	In my.cnf files, set the 
+		log_slave_updates=ON
+		server_id=2
+		binlog_format=MIXED
 
 	Launch MariaDB on the slave
 
@@ -154,10 +162,10 @@ Launch the copy, configure as a slave
 	Launch the client and configure a different server_id, binlog, and tell it 
 	  to log slave updates:
 
-MariaDB [(none)]> SET @@server_id = 2;
 MariaDB [(none)]> SET @@log_bin="binlog"	(you already did this earlier in my.cnf files)
 MariaDB [(none)]> SET @@binlog_format = 'MIXED';
-MariaDB [(none)]> SET @@log_slave_updates = 'ON';
+
+
 
 	Now we need to tell the slave who its master is - most of these values
 	  are things you should have noted above (master ip, slave user/password, etc):
@@ -167,8 +175,8 @@ MariaDB [(none)]> CHANGE MASTER TO
 	-> MASTER_USER = 'slave1',
 	-> MASTER_PASSWORD = 'password',
 	-> MASTER_PORT = 5000,
-	-> MASTER_LOG_FILE = 'binlog.000042',	(from master binlog coords)
-	-> MASTER_LOG_POS = '1456'		(from master binlog coords)
+	-> MASTER_LOG_FILE = 'binlog.000003',	(from master binlog coords)
+	-> MASTER_LOG_POS = 629			(from master binlog coords)
 
 	Now that we've told it who's boss, have it report for duty.
 
