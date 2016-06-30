@@ -92,10 +92,7 @@ By default, the text files need to be in the data/dbName dir
 	mysqlimport -u calvin -p weasley *.txt
 
 copy/paste
-CONNECT engine (later)
-	Connect for SQL Server
-	Connect for Txt file
-	Connection to Hive (as time allows)
+
 DATA/INDEX DIRECTORY
 aria_log
 	undo logs - transaction commit/rollback
@@ -131,8 +128,80 @@ ssh into the box
 Lunch 1:40 - 2:40 Eastern 
 
 
+Backup (XtraBackup)
+
+	Install EPEL Repo (Extra Packages for Enterprise Linux)
+	
+		cd ~
+		wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
+		rpm -i epel-release-latest-6.noarch.rpm
+
+	Install Percona Repo
+
+		# You can also just use yum install on the RPM
+		yum install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+
+	Install Percona XtraBackup
+
+		yum install percona-xtrabackup-24
+
+	Two-step backup
+
+		Data Backup
+
+innobackupex --user=calvin --password=password /mariadb_runtime/backup/
+
+		Prepare (structure)
+
+innobackupex --defaults-file=/etc/my.cnf --apply-log /mariadb_runtime/backup/201
+6-06-29_15-09-50/
+
+		Restore **
+
+innobackupex --defaults-file=/etc/my.cnf --copy-back  /mariadb_runtime/backup/20
+16-06-29_15-09-50/
+
+			** The restore is not exact - 
+				Data Directories and Index Directories may not be honored
+				if we used the symlink trick
+				to distribute our datafiles and indexes those things
+				will need to be re-wired
+
+	
+Point-in-time recovery
 
 
+https://www.percona.com/doc/percona-xtrabackup/2.2/innobackupex/pit_recovery_ibk.html
+
+
+
+Replication
+
+
+Cloud Virtualization
+IaaS - Infrastructure as a Service
+PaaS - Platform  as a Service (JEE, .NET)
+SaaS - Software  as a Service (Salesforce.com CRM)
+	CRMaaS
+	DBaaS
+	
+
+
+
+
+
+
+
+bin3=>324
+bin3=>584
+
+
+
+
+CONNECT engine (later, possibly tomorrow or Friday)
+	Connect for SQL Server
+	Connect for Txt file
+	Connection to Hive (as time allows)
 
 
 
