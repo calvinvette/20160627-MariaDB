@@ -110,9 +110,42 @@ Launch the copy, configure as a slave
 	Launch the Slave1 VM
 	Configure the network
 		Alter the /etc/sysconfig/networking/devices/eth0 with the new MAC address
-	Restart the network, verify we have a new IP address ('ifconfig eth0')
+		/etc/init.d/network restart
+
+	OR
+		system-config-network-tui
+			Device Configuration
+			Add New Device
+			-> Ethernet
+			...Name = eth2 or eth3 (whichever was "public" internet)
+			...Device = (same as Name)
+			...Use DHCP = [*]   (check using spacebar)
+			...Peer DNS = [*]   
+			...On Boot = [*]   
+			...Controller By Network Manager = [*]
+			OK
+			Select the new Ethernet in the list
+			Save Button
+			Activate Button
+			Cancel
+			Save & Quit
+
+		/sbin/ifup eth2 (or whichever is public)
+			   
+
+	Restart the network if necessary, verify we have a new IP address ('ifconfig eth0')
+
+		/etc/init.d/network restart
+		ifconfig -a
+
 	Ping the master's IP address from the slave
+		ping 192.168.2.99
+
 	Ping the slave's IP address from the master
+		ping 192.168.2.98
+
+	(Control-C to get out of ping)
+
 
 	Launch MariaDB on the slave
 
