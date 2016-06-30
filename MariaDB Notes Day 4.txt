@@ -1,0 +1,96 @@
+Global variables vs. Session Variables
+Dynamic vs. Static Variables
+
+
+Replication
+	Asynchronous
+	Master/Slave
+	Slave can have multiple masters
+		(Slave can be slave to Accounting and Inventory,
+			but not Accounting Master A and Master B)
+
+Binlog format
+	Statement - if it might modify the data/structure, 
+		send SQL statement to slaves
+		Deterministic or non-deterministic problem
+			sysdate(), rand(), etc
+	Row - data diffs, 
+		usually less efficient particularly for queries
+			that modify a lot of records at once
+		may be more efficient when a lot of operations
+			modify a small number of rows
+		Doesn't care about deterministic/non-deterministic
+	Mixed - best of both, but may be wrong if deterministic
+		/non-deterministic info is inaccurate
+		set a = sysdate();
+		insert into Customer values (..., @a, ...);
+
+	Change binlog format on a session basis
+	Can't change it inside a stored program (function/proc)
+		(AFAIK, hopefully will change soon 
+			but technical hurdles exist)
+
+
+
+Exercise: 
+
+Install a larger data set
+	weasleydb mysqldump (~3Mb, ~50k records)
+
+wget http://nextgeneducation.com/cvs/xmardba/data/weasleydb.mysql.dump
+mysql -u calvin -p
+	drop database weasley
+	create database weasleydb
+	use weasleydb
+	source weasleydb.mysql.dump
+	show tables
+	select * from Customer
+
+Clone the MariaVM (VirtualBox cloning)
+	Fix the mysql /etc/init.d script
+		Kludge for now
+	Shutdown the Linux VM (controlled graceful shutdown)
+	shutdown -h now
+	In VirtualBox settings, make sure:
+		Network Adapter 1 (eth0 in Linux) is Attached To "Bridged Adapter
+		Network Adapter 2 (eth1 in Linux) is Attached To "intnet"
+		CPU # cores is small (1 or 2 - 
+		  total for all VMs running has to be 
+		  less than twice the real # of cores/hyper threads)
+
+	Now Right-click on VM in VirtualBox Manager and "Clone"
+	Call the clone "MariaDB Slave 1", Re-initialize MAC addresses
+	On the next screen, select "Full Clone"
+	Open the settings of "MariaDB Slave 1", copy the new MAC address for Adapater 1 to notepad
+
+		On my Slave, the new MAC is: 080027776A22
+
+
+Launch the original VM, configure as a master
+	Re-launch MariaDB VM
+	Stop there!
+	Take a break until 12:05
+	We'll configure as a master when we come back.
+
+Launch the copy, configure as a slave
+
+Verify replication is working 
+	1. they can see each other
+	2. Modify the data on the master (insert/update/delete)
+	3. Verify data on the slave
+
+Verify replication survives failure
+	1. Shut down slave
+	2. Modify data on master
+	3. Restart slave
+	4. Verify data on slave
+
+
+
+
+
+
+
+
+
+
