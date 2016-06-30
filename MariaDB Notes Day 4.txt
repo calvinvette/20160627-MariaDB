@@ -206,12 +206,67 @@ MariaDB [(none)]> START SLAVE;
 	4. Verify data on slave
 
 
+Please let me know if you're ready to move on
+or need a few more minutes in the chat window.
+
+Otherwise we'll get started in a few more minutes.
 
 
 
-Lunch + Replication Lab from now until 3:10 Eastern
 
 
+
+Galera - 
+	Two-Phase Commit-like (2PC), like an 
+		X/Open Architecture (XA) Transaction (TX)
+	Initial node gets a query (update/delete/insert/create, etc.)
+	Sends out request to all cluster nodes
+	Every node calculates results, in a side buffer
+	Initial node "certifies" the transaction
+	Sends out certification to all cluster nodes
+	Certification triggers each node to commit the 
+		transaction it calculated locally
+
+	+ Consistent (as opposed to "Eventually Consistent" like normal Replication)
+	+ Light on network resources
+	+ Auto node allocation (node joining the cluster)
+
+	- InnoDB (including XtraDB) only
+	+ Cassandra doesn't need Galera replication
+	+ MongoDB doesn't need Replication
+	- Aria/MyISAM does... 
+
+	+ Highly optimized for MariaDB
+	+ MariaDB 10.0(?) integrates Galera
+	+ GTID Support 
+
+SST
+	State Snapshot Transfer
+		Choose mysqldump, rsync, xtrabackup
+IST
+	Incremental State Transfer (diff)
+
+
+WSREP
+	Write Set Replication
+	wsrep API is a general API that can provide this architecture
+	wsrep variables in mariadb server:
+
+	General Cluster - cluster address, name; node address, name
+	Performance & Reliability - # slave threads
+	State Snapshot Transfer - sst_method 
+	Galera Limitations - experimental MyISAM 
+
+
+instead of "iptables -F", which opens up the firewall completely, we want
+to be more laser-precise to just the ports we need
+
+(CV - double check syntax!)
+iptables -I INPUT -p tcp -m state --state-new --dport 3306 -j ACCEPT
+
+SELinux - Policy per application
+	file read/write permissions
+	network sockets
 
 
 

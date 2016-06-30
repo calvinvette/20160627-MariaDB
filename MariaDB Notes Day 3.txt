@@ -198,13 +198,6 @@ bin3=>584
 
 
 
-CONNECT engine (later, possibly tomorrow or Friday)
-	Connect for SQL Server
-	Connect for Txt file
-	Connection to Hive (as time allows)
-
-
-
 
 	
 

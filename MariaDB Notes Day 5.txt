@@ -1,0 +1,48 @@
+Day 5
+
+On both "master" and "slave1"
+
+sestatus - find out current mode - want permissive or disabled FOR NOW!
+setenforce 0 (reboot???)
+iptables -F (FOR NOW - adjust later)
+
+yum install galera
+
+Modify the /etc/my.cnf.d/server.cnf
+
+change mysql password, 
+change the mysql user shell
+
+(Remember to do the above on both machine!)
+
+
+On "master"
+log in as mysql
+start mysqld in new cluster mode
+mysqld --wsrep-new-cluster
+
+On "slave1":
+Start mysqld_safe normally
+
+On "master":
+stop the cluster initiation mysqld:
+Start the mysqld_safe normally
+
+
+
+
+
+
+Performance Monitoring and Tuning
+Monyog
+
+Docker
+
+
+CONNECT engine (later, possibly tomorrow or Friday)
+	Connect for SQL Server
+	Connect for Txt file
+	Connection to Hive (as time allows)
+
+
+
