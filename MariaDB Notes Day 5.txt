@@ -20,6 +20,9 @@ To make these changes survive reboot, add the parameters to
 
 (Add lines like the Port 22 line, but with the port numbers above)
 
+(you can flush and re-read the config with:
+
+/etc/init.d/iptables restart
 
 
 On both "master" and "slave1"
@@ -68,8 +71,14 @@ query_cache_size=0
 
 
 
-change mysql password, 
+change mysql password (as root), 
+
+passwd mysql
+
 change the mysql user shell
+
+chsh -s /bin/sh mysql
+
 
 (Remember to do the above on both machine!)
 
