@@ -261,8 +261,7 @@ WSREP
 instead of "iptables -F", which opens up the firewall completely, we want
 to be more laser-precise to just the ports we need
 
-(CV - double check syntax!)
-iptables -I INPUT -p tcp -m state --state-new --dport 3306 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state=new --dport 3306 -j ACCEPT
 
 SELinux - Policy per application
 	file read/write permissions

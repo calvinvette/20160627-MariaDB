@@ -1,5 +1,22 @@
 Day 5
 
+IPTables:
+
+Temporarily open ports (won't survive reboot):
+iptables -I INPUT -p tcp -m state --state=new --dport 3306 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state=new --dport 4567 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state=new --dport 4568 -j ACCEPT
+iptables -I INPUT -p tcp -m state --state=new --dport 4444 -j ACCEPT
+
+
+To make these changes survive reboot, add the parameters to
+
+/etc/sysconfig/iptables
+
+(Add lines like the Port 22 line, but with the port numbers above)
+
+
+
 On both "master" and "slave1"
 
 sestatus - find out current mode - want permissive or disabled FOR NOW!
@@ -8,7 +25,43 @@ iptables -F (FOR NOW - adjust later)
 
 yum install galera
 
-Modify the /etc/my.cnf.d/server.cnf
+Modify the /etc/my.cnf.d/server.cnf:
+
+# this is only for the mysqld standalone daemon
+[mysqld]
+;basedir=/mariadb_runtime/
+datadir=/mariadb_runtime/data/
+;general-log=/mariadb_runtime/logs/mariadb.log
+;log-slow-queries=/mariadb_runtime/mariadb.slow.log
+log-error=/mariadb_runtime/logs/mariadb.error.log
+bind-address=0.0.0.0
+;user=mysql
+pid-file=/mariadb_runtime/run/mariadb.pid
+socket=/mariadb_runtime/run/mariadb.sock
+log_bin=/mariadb_runtime/data/binlog
+binlog_format=MIXED
+server_id=1
+
+#
+# * Galera-related settings
+#
+[galera]
+# Mandatory settings
+wsrep_on=ON
+#wsrep_provider=
+wsrep_provider=/usr/lib64/galera/libgalera_smm.so
+wsrep_cluster_address="gcomm://192.168.2.98,192.168.2.99"
+binlog_format=ROW
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
+#innodb_doublewrite=0
+innodb_support_xa=0
+query_cache_size=0
+
+
+
+
+
 
 change mysql password, 
 change the mysql user shell
@@ -34,6 +87,8 @@ Start the mysqld_safe normally
 
 
 Performance Monitoring and Tuning
+	EXPLAIN/ANALYZE
+
 Monyog
 
 Docker
