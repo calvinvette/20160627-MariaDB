@@ -173,19 +173,70 @@ Nagios
 Break for Lunch, then come back and optionally install
   Monyog until 3:15
 
+UnixODBC -
+	yum install unixODBC
+	Download & Install mysql/maria odbc driver
+https://downloads.mariadb.org/connector-odbc/
+
+	odbcinst ...
+		Driver + User/Password/URL+DB
+	
+OpenSource Database Test Suite
+http://osdldbt.sourceforge.net/
+download test, uncompress (tar -xvzf dbt...tar.gz)
+cd dbt...
+./configure
 
 
 
-
+OpenStreetMap (Maria Spatial Support)
+https://mariadb.com/kb/en/mariadb/openstreetmap-dataset/
 
 
 Docker
+	http://docker.com
+	Setup new machines
+	Paravirtualization (sub-divide a vm)
+	Consistent way to set up a server
+	Dockerfiles Aggregate on top of other base Dockerfiles
+	
+Chef
+	https://www.chef.io/
+	Runtime consistency in cluster setups
+	See also Puppet, Ansible, Salt
+
+Kubernetes (k8s)
+	Manages runtime # of instances of Docker machines
+	Helps auto-manage based on current load
+	Spin up more machines as necessary, spin down extra machines when not
+
+Character Set
+	Server default
+	Database level
+	Table level
+	Column level
+	Difficult/nigh impossible to alter after the fact without data loss
+
+
+FullText Search - use dedicated product and link in?
+
+	SphinxSE - Maria has a plugin for it already
+
+	Lucene
+
+	Or Galera rolling cluster update?
 
 
 CONNECT engine (later, possibly tomorrow or Friday)
-	Connect for SQL Server
+	Connect for other SQL Server
 	Connect for Txt file
 	Connection to Hive (as time allows)
+
+
+
+Case Study (next Thurs? Lunch?)
+
+
 
 
 
