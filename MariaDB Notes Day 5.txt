@@ -129,6 +129,56 @@ Performance Monitoring and Tuning
 
 Monyog
 
+	On one of the linux machines, download and rpm install monyog:
+	wget https://www.webyog.com/downloadtracker?wy=1512104\&pType=RPM\&bit=64 -O MONyog-6.5.3-0.x86_64.rpm
+	rpm -i MONyog-6.5.3-0.x86_64.rpm
+
+	On the Windows desktop, open a browser to:
+	http://192.168.2.98:5555
+
+	On the login screen, just click Login (admin has no password)
+	For the trial edition, give it a fake email address
+	It will ask to add a server.
+		Name: master
+		Tag:	GaleraDev
+		MySQL Host: 192.168.2.98
+		MySQL Username: root
+		MySQL Password: Pa$$w0rd
+
+		Connection Type: SSH Tunnel
+		SSH Host: 198.168.2.98
+		SSH UserName: root
+		Authentication Type: Password
+		SSH Password: Pa$$w0rd
+
+	Next>
+
+		Do you wnat to use SSH Connection: Yes
+		OS of the host: Linux
+		Use same as tunnel details: (Check)
+
+	Save All (Ignore last two screens)
+
+
+	Select "Real Time" Menu Bar option
+	Start a new session
+
+	In Linux/mysql prompt, fire off a few queries and see results
+
+
+
+Nagios
+
+
+Break for Lunch, then come back and optionally install
+  Monyog until 3:15
+
+
+
+
+
+
+
 Docker
 
 
