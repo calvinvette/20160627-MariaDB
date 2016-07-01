@@ -3,7 +3,12 @@ Day 5
 IPTables:
 
 Temporarily open ports (won't survive reboot):
+
+These on the client-facing network adapter/IP:
 iptables -I INPUT -p tcp -m state --state=new --dport 3306 -j ACCEPT
+
+These on the private backplane network adapter/IP:
+
 iptables -I INPUT -p tcp -m state --state=new --dport 4567 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state=new --dport 4568 -j ACCEPT
 iptables -I INPUT -p tcp -m state --state=new --dport 4444 -j ACCEPT
@@ -21,7 +26,7 @@ On both "master" and "slave1"
 
 sestatus - find out current mode - want permissive or disabled FOR NOW!
 setenforce 0 (reboot???)
-iptables -F (FOR NOW - adjust later)
+
 
 yum install galera
 
@@ -39,7 +44,7 @@ bind-address=0.0.0.0
 pid-file=/mariadb_runtime/run/mariadb.pid
 socket=/mariadb_runtime/run/mariadb.sock
 log_bin=/mariadb_runtime/data/binlog
-binlog_format=MIXED
+;binlog_format=MIXED
 server_id=1
 
 #
@@ -76,11 +81,35 @@ mysqld --wsrep-new-cluster
 
 On "slave1":
 Start mysqld_safe normally
+mysqld_safe &
 
 On "master":
 stop the cluster initiation mysqld:
-Start the mysqld_safe normally
+service mysql stop
 
+Start the mysqld_safe normally
+mysqld_safe &
+
+
+
+Optimistic Locking:
+
+Web App
+select * from Customer where (customerId = 1);
+	Harry @ 12:03
+
+update Customer set phoneNumber = "" and ts="12:04" 
+	where customerId = 1 and ts=12:03
+
+
+iPhone App:
+select * from Customer where (customerId = 1);
+	Harry @ 12:03
+
+update Customer set phoneNumber = "" and ts="12:04" 
+	where customerId = 1 and ts=12:03
+	fails because the web app modifed ts to 12:04
+	(0 records updated)
 
 
 
